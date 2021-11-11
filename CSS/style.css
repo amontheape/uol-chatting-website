@@ -40,7 +40,8 @@ main {
     height: 100vh;
     background-color: #f3f3f3;
 
-    margin: 80px 0;
+    padding-top: 80px;
+    padding-bottom: 84px;
 }
 
 .wrapper {
@@ -72,11 +73,30 @@ main {
     border-radius: 4px;
 
     margin-top: 94px;
+
+    text-align: center;
 }
 
 .wrapper input::placeholder {
     color: #aeaeae;
+    text-align: center;
 }
+
+.wrapper span {
+    width: 261px;
+    height: 18px;
+
+    background-color: lightpink;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+
+    text-align: center;
+}
+
+/* .wrapper span.hidden {
+    transform: translateY(30px);
+    transition-duration: 2s;
+} */
 
 button {
     
@@ -103,3 +123,64 @@ footer {
     left: 100% - calc(375px/2);
 }
 
+.messages-box {
+    overflow-y: auto;
+
+}
+
+.messages-box::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* Track */
+.messages-box::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+.messages-box::-webkit-scrollbar-thumb {
+    background: #ced6d4;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.messages-box::-webkit-scrollbar-thumb:hover {
+    background: #afb6b8;
+}
+
+.msg {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: left;
+
+    word-break: break-word;
+
+    padding: 8px;
+    margin-top: 4px;
+
+    border-radius: 2px;
+}
+
+.msg strong {
+    margin-left: 4px;
+}
+
+.msg .time {
+    color: #aaa;
+}
+
+.status {
+    background-color: #DCDCDC;
+}
+
+.normal {
+    background-color: #FFFFFF;
+}
+
+.private {
+    background-color: #FFDEDE
+}
