@@ -22,11 +22,18 @@ header {
 
     background-color: #fff;
 
-    padding: 15px;
+    padding: 22px;
+
+    justify-content: space-between;
+    align-items: center;
 
     position: fixed;
     top: 0;
     left: 100% - calc(375px/2);
+}
+
+header ion-icon {
+    font-size: 45px;
 }
 
 header img{
@@ -56,7 +63,7 @@ main {
     position: absolute;
     z-index: 1;
     top: 0;
-    left: 0;
+    left: 100% - calc(375px/2);
 }
 
 .wrapper img {
@@ -93,12 +100,10 @@ main {
     text-align: center;
 }
 
-/* .wrapper span.hidden {
-    transform: translateY(30px);
-    transition-duration: 2s;
-} */
-
 button {
+    font-family: 'Roboto', sans-serif;
+    font-style : normal;
+    color: #696969;
     
     width: 109px;
     height: 45px;
@@ -116,20 +121,46 @@ footer {
 
     background-color: #fff;
 
-    padding: 15px;
-
     position: fixed;
     bottom: 0;
     left: 100% - calc(375px/2);
+
+    justify-content: space-between;
 }
 
 footer input{
-    text-align: center;
+    height: 100%;
+    width: 80%;
+
+    font-family: 'Roboto', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: left;
+
     border: none;
+    padding-left: 17px;
 }
 
 footer input::placeholder {
-    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: left;
+    color: #000;
+
+}
+
+footer ion-icon {
+    font-size: 30px;
+}
+
+footer .icon-box {
+    width: 20%;
+    padding-right: 17px;
 }
 
 .messages-box {
@@ -163,7 +194,7 @@ footer input::placeholder {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 16px;
+    line-height: 20px;
     text-align: left;
 
     word-break: break-word;

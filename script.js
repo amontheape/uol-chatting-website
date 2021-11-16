@@ -8,6 +8,9 @@ function loadPage() {
         };
     });
 
+    const sendButton = document.querySelector("footer .icon-box");
+    sendButton.addEventListener("click", sendMessage);
+
     document.querySelector("footer input").addEventListener("keyup", (pressed)=>{
         if(pressed.keyCode === 13){
             sendMessage();
@@ -15,9 +18,12 @@ function loadPage() {
     });
 }
 
-let userName;
+let userName, onlineInterval;
 
 function getName() {
+
+    document.querySelector(".wrapper span").classList.add("hidden");
+
     userName = document.querySelector(".wrapper input").value;
 
     const nameCheckPromise = axios.post("https://mock-api.driven.com.br/api/v4/uol/participants", {name: userName});
@@ -25,9 +31,13 @@ function getName() {
     nameCheckPromise.then(()=> {
         loadChat();
 
-        setInterval(()=> {
+        document.querySelector(".wrapper").classList.add("hidden");
+
+        onlineInterval = setInterval(()=> {
             const onlineStatusPromise = axios.post("https://mock-api.driven.com.br/api/v4/uol/status", {name: userName});
-            onlineStatusPromise.then(console.log("post status OK"));
+
+            onlineStatusPromise.then(()=>console.log("post status OK"));
+            onlineStatusPromise.catch(leaveChat);
         }, 5000);
     });
 
@@ -38,16 +48,16 @@ function nameError(error) {
     if (error.response.status === 400) {
         document.querySelector(".wrapper input").value = '';
         document.querySelector(".wrapper span").classList.toggle("hidden");
-    } else {
-        console.log(error);
-    };
+    }
 }
+
+let chatInterval;
 
 function loadChat() {
 
     const getServerMessagesPromise = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages");
 
-    getServerMessagesPromise.then( ( {data} )=>{
+    getServerMessagesPromise.then( ( {data} )=> {
 
         const messageBox = document.querySelector(".messages-box");
 
@@ -55,40 +65,37 @@ function loadChat() {
 
         const filteredData = data.filter((message)=> !(message.type === 'private_message' && message.to !== userName));
 
-        console.log(filteredData);
-
         filteredData.forEach( message => {
             messageBox.innerHTML += messageCustomizer(message);
-
-            const newScroll = document.querySelectorAll(".msg");
-            newScroll[newScroll.length - 1].scrollIntoView(); 
         });
+
+        const newScroll = document.querySelectorAll(".msg");
+        newScroll[newScroll.length - 1].scrollIntoView(); 
 
     });
 
-    setInterval(loadChat, 20000);
+    chatInterval = setInterval(loadChat, 3000);
 }
 
 function messageCustomizer( {from, to, text, type, time='agora'} ) {
     
     switch (type) {
         case 'status': 
-            return `<div class="msg status">
+            return `<div class="msg status"data-identifier="message">
                         <span class="time">(${time})</span>
                         <strong>${from}</strong>
                         ${text}
                     </div>`;
 
         case 'message':
-            return `<div class="msg normal"> 
+            return `<div class="msg normal" data-identifier="message"> 
                         <span class="time">(${time})</span>
                         <strong>${from}</strong> para<strong>${to}</strong>:
                         ${text}
                     </div>`;
 
         case 'private_message':
-            if (to !== userName) break;
-            return `<div class="msg private">
+            return `<div class="msg private" data-identifier="message">
                         <span class="time">(${time})</span>
                         <strong>${from}</strong> reservadamente para<strong>${to}</strong>:
                         ${text}
@@ -116,12 +123,29 @@ function sendMessage() {
 
     messageBox.innerHTML += messageCustomizer(currentMsg);
 
-    const newScroll = document.querySelectorAll(".msg");
-    newScroll[newScroll.length - 1].scrollIntoView();
+    const newMsgScroll = document.querySelectorAll(".msg");
+    newMsgScroll[newMsgScroll.length - 1].scrollIntoView();
 
     footerInput.value = '';
 
-    messageSent.then((response)=>{console.log(response)}, (error)=>{console.log(error)});
+    messageSent.catch(treatMsgError);
+}
+
+function treatMsgError(error) {
+    if (error.response.status === 400) {
+        alert("Usuário desconectado por inatividade não pode enviar msg!");
+        clearInterval(chatInterval);
+        setTimeout(window.location.reload(), 1500);
+    };
+}
+
+function leaveChat() {
+    clearInterval(onlineInterval);
+    clearInterval(chatInterval);
+
+    alert("Desconectado por inatividade! Realize novo login.");
+
+    setTimeout(window.location.reload(), 1500);
 }
 
 loadPage();
