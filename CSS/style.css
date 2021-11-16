@@ -123,6 +123,15 @@ footer {
     left: 100% - calc(375px/2);
 }
 
+footer input{
+    text-align: center;
+    border: none;
+}
+
+footer input::placeholder {
+    text-align: center;
+}
+
 .messages-box {
     overflow-y: auto;
 
@@ -182,5 +191,5 @@ footer {
 }
 
 .private {
-    background-color: #FFDEDE
+    background-color: #FFDEDE;
 }
